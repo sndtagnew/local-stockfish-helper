@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "ChessHelper.ai",
+  "version": "1.1.0",
+  "minimum_chrome_version": "116",
+  "homepage_url": "https://chesshelper.ai",
+  "description": "Analyzes chess positions on chess.com and lichess.org with a bundled local Stockfish engine and displays recommended moves as visual overlays",
+  "permissions": [
+    "storage",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "*://*.chess.com/*",
+    "*://*.lichess.org/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.lichess.org/*"
+      ],
+      "js": [
+        "content/lichess-trusted-events.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.chess.com/*"
+      ],
+      "js": [
+        "content/chess-trusted-events.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "*://*.chess.com/*",
+        "*://*.lichess.org/*"
+      ],
+      "js": [
+        "config.js",
+        "lib/chess.min.js",
+        "content/position-utils.js",
+        "content/content.js",
+        "content/overlay.js"
+      ],
+      "css": [
+        "content/styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "ChessHelper.ai",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
